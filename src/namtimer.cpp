@@ -268,7 +268,8 @@ const auto statefiles = std::to_array<std::string>({
 	"state6.clk",
 	"state7.clk",
 	"state8.clk",
-	"state9.clk"
+	"state9.clk",
+	"state0.clk"
 }
 );
 
