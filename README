@@ -1,4 +1,6 @@
-A simple timer made in C++20 and SDL2, possibly useful for speedrunners.
+A simple timer made in C++20 and SDL2, possibly useful for speedrunners or marathoners.
+
+Features a way to easily save your time, saved to the directory you run the executable from.
 
 General Controls:
 
@@ -10,6 +12,10 @@ Controls When Paused:
 = Left/Right - Moves the cursor left/right (wraps around).
 
 = 0-9 - Sets the selected digit to the pressed number.
+
+= Ctrl+0-9 - Loads the corresponding .clk file.
+
+= Ctrl+Shift+0-9 - Saves the current time to the corresponding .clk file.
 
 
 
