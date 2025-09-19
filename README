@@ -1,0 +1,20 @@
+A simple timer made in C++20 and SDL2, possibly useful for speedrunners.
+
+General Controls:
+
+= L - Toggles pause and play.
+
+= M - Resets and pauses the timer.
+Controls When Paused:
+
+= Left/Right - Moves the cursor left/right (wraps around).
+
+= 0-9 - Sets the selected digit to the pressed number.
+
+
+
+Also features a simple UDP control system (7693 by default):
+
+= Sending 'PPPPPPPP' will toggle pause and play.
+
+= Sending 'RRRRRRRR' will reset and pause the timer.
