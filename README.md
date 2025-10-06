@@ -1,28 +1,29 @@
-# NamTimer
-A simple timer made in C++20 and SDL2, possibly useful for speedrunners or marathoners.
 
-Features a way to easily save your time, saved to the directory you run the executable from.
+# NamTimer 🐾✨  
+A simple timer made in C++20 and SDL2, possibly useful for speedrunners or marathoners nya~ (≧▽≦)  
 
-## General Controls
-L - Toggles pause and play.
+Features a way to easily save your time, saved to the directory you run the executable from 🌸🐱.  
 
-M - Resets and pauses the timer.
+## General Controls 💖  
+L - Toggles pause and play nya~ (≧◡≦)  
 
-## Controls When Paused
-Left/Right - Moves the cursor left/right (wraps around).
+M - Resets and pauses the timer meow~ 🐾  
 
-0-9 - Sets the selected digit to the pressed number.
+## Controls When Paused 🌸✨  
+Left/Right - Moves the cursor left/right (wraps around) nya~ 🐱  
 
-Ctrl+0-9 - Loads the corresponding .clk file.
+0-9 - Sets the selected digit to the pressed number 💖  
 
-Ctrl+Shift+0-9 - Saves the current time to the corresponding .clk file. Will ask you to confirm by pressing the same key combination again. Press Escape to cancel.
+Ctrl+0-9 - Loads the corresponding .clk file 🌸✨  
 
-## UDP Socket (port 7693 by default)
-Sending 'PPPPPPPP' will toggle pause and play.
+Ctrl+Shift+0-9 - Saves the current time to the corresponding .clk file. Will ask you to confirm by pressing the same key combination again meow~ 🐾. Press Escape to cancel nya~ (≧▽≦)  
 
-Sending 'RRRRRRRR' will reset and pause the timer.
+## UDP Socket (port 7693 by default) 💻🐱  
+Sending 'PPPPPPPP' will toggle pause and play 🌸✨  
 
-## Screenshots
+Sending 'RRRRRRRR' will reset and pause the timer nya~ 🐾  
+
+## Screenshots 🌸  
 ![NamTimer while it is playing.](timerplay.png)
 
 ![NamTimer while it is paused, the selection cursor is visible.](timerpause.png)
