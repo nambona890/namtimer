@@ -117,6 +117,8 @@ enum
 	MOD_CTRL = 2
 };
 
+int confirmnum = -1;
+
 bool segmentpixels[7][7][4] =
 {
     {
@@ -206,6 +208,7 @@ int curdigit = 0;
 
 bool pressedstate = false;
 bool heldstate = false;
+bool escstate = false;
 
 using sysclock = std::chrono::system_clock;
 
@@ -215,6 +218,8 @@ uint64_t clockoffset = 0;
 char clockdigits[9] = {0,0,0,0,0,0,0,0,0};
 const int timediv[9] = {10,10,10,6,10,6,10,10,10};
 
+SDL_Color c1 = SDL_Color(255,255,255,255);
+SDL_Color c2 = SDL_Color(0,0,0,255);
 
 
 void inttodigits(uint64_t cs)
@@ -251,7 +256,7 @@ void drawnum(int num, int x, int y)
                 {
                     if(segmentpixels[seg][ny][nx])
                     {
-                        SDLPutPixel(x+nx,y+ny,{255,255,255,255});
+                        SDLPutPixel(x+nx,y+ny,c1);
                     }
                 }
             }
@@ -336,12 +341,18 @@ void timerdisplay()
 
     while(!sdlquit)
     {
-        SDL_FillRect(winsurface,NULL,SDL_MapRGB(winsurface->format,0,0,0));
-        SDLPutPixel(17,3,{255,255,255,255});
-        SDLPutPixel(17,8,{255,255,255,255});
-        SDLPutPixel(30,3,{255,255,255,255});
-        SDLPutPixel(30,8,{255,255,255,255});
-        SDLPutPixel(43,8,{255,255,255,255});
+		c1 = (timerstate == 2) ? 
+						SDL_Color(0,0,0,255) :
+						SDL_Color(255,255,255,255);
+		c2 = (timerstate == 2) ? 
+						SDL_Color(255,255,255,255) :
+						SDL_Color(0,0,0,255);
+        SDL_FillRect(winsurface,NULL,std::bit_cast<Uint32>(c2));
+        SDLPutPixel(17,3,c1);
+        SDLPutPixel(17,8,c1);
+        SDLPutPixel(30,3,c1);
+        SDLPutPixel(30,8,c1);
+        SDLPutPixel(43,8,c1);
         progaccess.lock();
         while(SDL_PollEvent(&e))
         {
@@ -388,7 +399,10 @@ void timerdisplay()
 					else if(modifiers == MOD_CTRL | MOD_SHIFT)
 					{
 						if(pressednum >= 0)
-							saveclock(pressednum);
+						{
+							timerstate = 2;
+							confirmnum = pressednum;
+						}
 					}
                     //std::cout << presseddir << " " << helddir << " " << curdigit << " " << pressednum << "\n";
                 }
@@ -403,6 +417,22 @@ void timerdisplay()
                         timerstate = 0;
                 }
                 break;
+			case 2:
+				{
+					if(pressednum == confirmnum)
+					{
+						if(modifiers == MOD_CTRL | MOD_SHIFT)
+						{
+							saveclock(pressednum);
+							timerstate = 0;
+						}
+					}
+					else if(escstate)
+					{
+						timerstate = 0;
+					}
+				}
+				break;
         }
 
         progaccess.unlock();
@@ -411,9 +441,11 @@ void timerdisplay()
         {
             drawnum(clockdigits[i],digitx[i],2);
         }
+
         presseddir = 0;
-        pressednum = -1;
+		pressednum = -1;
         pressedstate = false;
+		escstate = false;
 
         SDL_UpdateWindowSurface(window);
     }
@@ -435,6 +467,7 @@ void inputhandler(SDL_Keysym key, Uint32 state)
                 break;
             case SDLK_m:
                 resettimer();
+				break;
             case SDLK_LEFT:
                 presseddir = -1;
                 helddir = -1;
@@ -448,6 +481,9 @@ void inputhandler(SDL_Keysym key, Uint32 state)
 				break;
 			case SDLK_LSHIFT:
 				modifiers |= MOD_SHIFT;
+				break;
+			case SDLK_ESCAPE:
+				escstate = true;
 				break;
         }
     }

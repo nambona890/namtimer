@@ -15,7 +15,7 @@ Left/Right - Moves the cursor left/right (wraps around).
 
 Ctrl+0-9 - Loads the corresponding .clk file.
 
-Ctrl+Shift+0-9 - Saves the current time to the corresponding .clk file.
+Ctrl+Shift+0-9 - Saves the current time to the corresponding .clk file. Will ask you to confirm by pressing the same key combination again. Press Escape to cancel.
 
 ## UDP Socket (port 7693 by default)
 Sending 'PPPPPPPP' will toggle pause and play.
