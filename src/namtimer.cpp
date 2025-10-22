@@ -27,6 +27,8 @@ std::atomic<bool> sdlquit = false;
 SDL_Window* window = NULL;
 SDL_Surface* winsurface = NULL;
 
+std::string savedir = "";
+
 void SDLPutPixel(int x, int y, SDL_Color c)
 {
     if(x>=0 && x<SCREENWIDTH && y>=0 && y<SCREENHEIGHT)
@@ -284,7 +286,7 @@ void saveclock(unsigned i)
 	if(i<10)
 	{
 		std::cout << "Saving " << i << "\n";
-		auto statefile = statefiles[i];
+		auto statefile = savedir+statefiles[i];
 		std::filebuf cf;
 		cf.open(statefile,std::ios::out | std::ios::binary);
 		std::ostream clockfile(&cf);
@@ -299,7 +301,7 @@ void loadclock(unsigned i)
 	if(i<10)
 	{
 		std::cout << "Loading " << i << "\n";
-		auto statefile = statefiles[i];
+		auto statefile = savedir+statefiles[i];
 		std::filebuf cf;
 		cf.open(statefile,std::ios::in | std::ios::binary);
 		std::istream clockfile(&cf);
@@ -505,17 +507,39 @@ void inputhandler(SDL_Keysym key, Uint32 state)
     }
 }
 
-int main()
+int main(int argc,char** argv)
 {
+	for(int i=1;i<argc;i++)
+	{
+		if(!strcmp("-dir",argv[i]))
+		{
+			i++;
+			if(i>=argc)
+			{
+				std::cout << "Invalid argument." << std::endl;
+				return -1;
+			}
+			savedir = argv[i];
+			if(!savedir.ends_with('/'))
+			{
+				savedir+='/';
+			}
+		}
+		else
+		{
+			std::cout << "Invalid option." << std::endl;
+			return -1;
+		}
+	}
     if(SDL_Init(SDL_INIT_VIDEO)<0)
     {
-        std::cout << "Couldn't initialize SDL: " << SDL_GetError() << "\n";
+        std::cout << "Couldn't initialize SDL: " << SDL_GetError() << std::endl;
         return -1;
     }
     window = SDL_CreateWindow("Nambona Timer",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,SCREENWIDTH*PIXELSIZE,SCREENHEIGHT*PIXELSIZE,SDL_WINDOW_SHOWN);
     if(window==NULL)
     {
-        std::cout << "Couldn't create window: " << SDL_GetError() << "\n";
+        std::cout << "Couldn't create window: " << SDL_GetError() << std::endl;
         return -1;
     }
     winsurface = SDL_GetWindowSurface(window);
