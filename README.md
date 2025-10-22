@@ -1,7 +1,10 @@
 # NamTimer
 A simple timer made in C++20 and SDL2, possibly useful for speedrunners or marathoners.
 
-Features a way to easily save your time, saved to the directory you run the executable from.
+Features a way to easily save your time, by default saved to the directory you run the executable from (can be changed with command line options).
+
+## Command Line Options
+-dir \[directory\] - Set the directory to save your time in.
 
 ## General Controls
 L - Toggles pause and play.
