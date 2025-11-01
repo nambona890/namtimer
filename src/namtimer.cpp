@@ -18,6 +18,9 @@ constexpr int PIXELSIZE = 12;
 constexpr int SCREENWIDTH = 57;
 constexpr int SCREENHEIGHT = 14;
 
+char windowtitle[] = "Nambona Timer";
+char loadedwindowtitle[] = "Nambona Timer - Clock  ";
+
 void pauseunpause();
 void resettimer();
 void inputhandler(SDL_Keysym key, Uint32 state);
@@ -267,6 +270,7 @@ void drawnum(int num, int x, int y)
 }
 
 const auto statefiles = std::to_array<std::string>({
+	"state0.clk",
 	"state1.clk",
 	"state2.clk",
 	"state3.clk",
@@ -275,14 +279,25 @@ const auto statefiles = std::to_array<std::string>({
 	"state6.clk",
 	"state7.clk",
 	"state8.clk",
-	"state9.clk",
-	"state0.clk"
+	"state9.clk"
 }
 );
 
+const auto titlelist = std::to_array<char>({
+	'0',
+	'1',
+	'2',
+	'3',
+	'4',
+	'5',
+	'6',
+	'7',
+	'8',
+	'9'
+});
+
 void saveclock(unsigned i)
 {
-	i--;
 	if(i<10)
 	{
 		std::cout << "Saving " << i << "\n";
@@ -292,12 +307,13 @@ void saveclock(unsigned i)
 		std::ostream clockfile(&cf);
 		clockfile.write(clockdigits,9);
 		cf.close();
+		loadedwindowtitle[22] = titlelist[i];
+		SDL_SetWindowTitle(window,loadedwindowtitle);
 	}
 }
 
 void loadclock(unsigned i)
 {
-	i--;
 	if(i<10)
 	{
 		std::cout << "Loading " << i << "\n";
@@ -311,6 +327,8 @@ void loadclock(unsigned i)
 		//std::cout << "After: "; for(int i=0;i<9;i++) std::cout << static_cast<int>(tempclockdigits[i]) << ""; std::cout << "\n";
 		cf.close();
 		memcpy(clockdigits,tempclockdigits,9);
+		loadedwindowtitle[22] = titlelist[i];
+		SDL_SetWindowTitle(window,loadedwindowtitle);
 	}
 }
 
@@ -536,7 +554,7 @@ int main(int argc,char** argv)
         std::cout << "Couldn't initialize SDL: " << SDL_GetError() << std::endl;
         return -1;
     }
-    window = SDL_CreateWindow("Nambona Timer",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,SCREENWIDTH*PIXELSIZE,SCREENHEIGHT*PIXELSIZE,SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow(windowtitle,SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,SCREENWIDTH*PIXELSIZE,SCREENHEIGHT*PIXELSIZE,SDL_WINDOW_SHOWN);
     if(window==NULL)
     {
         std::cout << "Couldn't create window: " << SDL_GetError() << std::endl;
